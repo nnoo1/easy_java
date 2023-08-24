@@ -15,7 +15,7 @@ public class GenericClassDemo {
 
 
 
-    Cup c = new Cup();
+    Cup c = new Cup();  //raw타입 제너릭이  소용없음 ?37처럼 해야한다?
     c.setBeverage(new Boricha());
     if (c.getBeverage() instanceof Boricha) {
       Boricha boricha = (Boricha) c.getBeverage();
@@ -24,9 +24,13 @@ public class GenericClassDemo {
     }
 
     c.setBeverage(new Beer());
-    Beer beer = (Beer) c.getBeverage();
+//    Beer beer = (Beer) c.getBeverage();
+    Boricha bori = (Boricha) c.getBeverage();
+    bori.drink();
+
     c.setBeverage(new Beverage());
-    c.setBeverage(new Object());
+    Beer bev = (Beer)c.getBeverage(); //타입한정 후 추가
+//    c.setBeverage(new Object());  //error 51에 extends Beverage추가해서(타입한정?)
 //    beer = (Beer) c.getBeverage();
 
 
@@ -36,7 +40,7 @@ public class GenericClassDemo {
 
     Cup<Beer> beerCup = new Cup<>();
     beerCup.setBeverage(new Beer());
-    beer = beerCup.getBeverage();
+//    beer = beerCup.getBeverage(); //????????????머지 멀 어떻게 해야하지
 
   }
 }
@@ -44,11 +48,19 @@ public class GenericClassDemo {
 
 class Beverage {}
 
-class Boricha extends Beverage {}
+class Boricha extends Beverage {
+  void drink() {
+    System.out.println("어린아이만 마실 수 있다.");
+  }
+}
 
-class Beer extends Beverage{}
+class Beer extends Beverage{
+  void cheers() {
+    System.out.println("어른만 마실 수 있다");
+  }
+}
 
-class Cup<T> {
+class Cup<T extends Beverage> { //타입한정 추가 extends Beverage
     private T beverage;
 
     public T getBeverage() {
